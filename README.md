@@ -130,3 +130,4 @@ Resultado: ✅ Válida
 Tiempo de ejecución: 35.805268 segundos
 ```
 
+![Image](https://github.com/user-attachments/assets/7cc310e0-3b5a-41f2-b63a-ac3e8c394ac0)
