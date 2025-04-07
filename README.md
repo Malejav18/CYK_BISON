@@ -165,7 +165,7 @@ Cadena válida
 Tiempo de ejecución: 0.000048 segundos
 ```
 
-
+![Image](https://github.com/user-attachments/assets/ce5a1e48-b19e-4e9d-b86e-b382db742393)
 
 - El análisis con Bison es extraordinariamente rápido, con tiempos que apenas alcanzan milésimas de segundo incluso en cadenas largas. En comparación con CYK, Bison presenta un rendimiento varios órdenes de magnitud superior.
 
