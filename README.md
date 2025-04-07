@@ -180,3 +180,5 @@ Tiempo de ejecución: 0.000048 segundos
 - El algoritmo CYK es útil en escenarios donde se necesita validar cualquier gramática libre de contexto sin restricciones.
 
 - Por otro lado, Bison requiere una gramática más estructurada, pero ofrece un rendimiento enorme gracias a la generación de analizadores eficientes como LALR(1).
+
+# Prueba 2: Gramáticas Ambiguas
