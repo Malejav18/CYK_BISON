@@ -98,12 +98,7 @@ Gracias a su análisis previo en tiempo de compilación (generación de tablas L
 
 ---
 
-Para evidenciar esto, se utilizan tres casos de prueba:
-- **Caso 1:** 100 a's y 100 b's
-- **Caso 2:** 500 a's y 500 b's
-- **Caso 3:** 1000 a's y 1000 b's
-
-## Resultados:
+## Resultados CYK:
 ```
 Evaluando cadena con 100 a's y 100 b's (longitud 200)...
 Resultado: ✅ Válida
@@ -137,3 +132,41 @@ Tiempo de ejecución: 35.805268 segundos
 - En cadenas de menor tamaño, el algoritmo se comporta de manera eficiente. Sin embargo, al incrementar la longitud, el tiempo de ejecución se incrementa drásticamente, lo que refleja su limitada escalabilidad.
 
 - Esta tendencia sugiere que, si bien CYK es preciso y confiable, no es ideal para procesar grandes volúmenes de texto o aplicaciones que requieren respuestas en tiempo real sin aplicar optimizaciones.
+
+## Resultados Bison:
+Evaluando cadena con 100 a's y 100 b's
+```
+Cadena válida
+Tiempo de ejecución: 0.000005 segundos
+```
+Evaluando cadena con 200 a's y 200 b's
+```
+Cadena válida
+Tiempo de ejecución: 0.000011 segundos
+```
+Evaluando cadena con 400 a's y 400 b's
+```
+Cadena válida
+Tiempo de ejecución: 0.000021 segundos
+```
+Evaluando cadena con 600 a's y 600 b's
+```
+Cadena válida
+Tiempo de ejecución: 0.000026 segundos
+```
+Evaluando cadena con 800 a's y 800 b's
+```
+Cadena válida
+Tiempo de ejecución: 0.000036 segundos
+```
+Evaluando cadena con 1000 a's y 1000 b's
+```
+Cadena válida
+Tiempo de ejecución: 0.000048 segundos
+```
+
+
+
+- El análisis con Bison es extraordinariamente rápido, con tiempos que apenas alcanzan milésimas de segundo incluso en cadenas largas. En comparación con CYK, Bison presenta un rendimiento varios órdenes de magnitud superior.
+
+- La relación entre la longitud de la cadena y el tiempo de ejecución parece casi lineal, lo que es indicativo de una eficiencia mucho mayor en términos de complejidad computacional. Esto se debe a que Bison genera analizadores LL(1), LALR(1) u otros, según la gramática, permitiendo una ejecución optimizada en tiempo constante o casi lineal en muchos casos.
