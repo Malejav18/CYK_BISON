@@ -170,3 +170,13 @@ Tiempo de ejecución: 0.000048 segundos
 - El análisis con Bison es extraordinariamente rápido, con tiempos que apenas alcanzan milésimas de segundo incluso en cadenas largas. En comparación con CYK, Bison presenta un rendimiento varios órdenes de magnitud superior.
 
 - La relación entre la longitud de la cadena y el tiempo de ejecución parece casi lineal, lo que es indicativo de una eficiencia mucho mayor en términos de complejidad computacional. Esto se debe a que Bison genera analizadores LL(1), LALR(1) u otros, según la gramática, permitiendo una ejecución optimizada en tiempo constante o casi lineal en muchos casos.
+
+![Image](https://github.com/user-attachments/assets/e3a806c1-43d8-427a-9c4e-b8700de3046e)
+
+- CYK presenta una curva ascendente pronunciada, con un crecimiento cercano al cúbico en el tiempo de ejecución. Esto concuerda con su complejidad teórica O(n^3), y se traduce en una ejecución que llega hasta los 35 segundos para cadenas de longitud 2000.
+
+- Bison, en cambio, muestra un rendimiento sorprendentemente eficiente. Su tiempo de ejecución se mantiene en el orden de milisegundos, con un crecimiento prácticamente lineal respecto al tamaño de la entrada.
+
+- El algoritmo CYK es útil en escenarios donde se necesita validar cualquier gramática libre de contexto sin restricciones.
+
+- Por otro lado, Bison requiere una gramática más estructurada, pero ofrece un rendimiento enorme gracias a la generación de analizadores eficientes como LALR(1).
