@@ -70,3 +70,63 @@ Este lenguaje incluye cadenas como:
 - A → a
 - B → b  
 
+# Prueba 1: Complejidad Computacional
+
+Una de las diferencias más importantes entre el algoritmo CYK y un parser generado con Bison es la **eficiencia en tiempo de ejecución**, especialmente al procesar cadenas largas.
+
+### 🧮 CYK (Cocke–Younger–Kasami)
+
+- **Tipo de algoritmo:** Bottom-up mediante programación dinámica.
+- **Requisitos:** Gramática en Forma Normal de Chomsky (CNF).
+- **Complejidad temporal:**  
+  **O(n³ × |G|)** donde:
+  - *n* es la longitud de la cadena de entrada.
+  - *|G|* es el número de reglas en la gramática.
+
+Esto significa que su rendimiento cae significativamente con cadenas largas, pero es robusto y versátil, ideal para validadores generales y demostraciones teóricas.
+
+---
+
+### ⚙️ Bison (LALR(1))
+
+- **Tipo de parser:** Bottom-up por desplazamiento/reducción (shift-reduce).
+- **Requisitos:** Gramática en forma BNF o EBNF (no necesita CNF).
+- **Complejidad temporal:**  
+  **O(n)** en la mayoría de los casos (tiempo lineal en la longitud de la cadena).
+
+Gracias a su análisis previo en tiempo de compilación (generación de tablas LALR), Bison puede analizar cadenas largas de forma muy eficiente. Es el estándar de facto en compiladores reales.
+
+---
+
+Para evidenciar esto, se utilizan tres casos de prueba:
+- **Caso 1:** 100 a's y 100 b's
+- **Caso 2:** 500 a's y 500 b's
+- **Caso 3:** 1000 a's y 1000 b's
+
+## Resultados:
+```
+Evaluando cadena con 100 a's y 100 b's (longitud 200)...
+Resultado: ✅ Válida
+Tiempo de ejecución: 0.053141 segundos
+
+Evaluando cadena con 200 a's y 200 b's (longitud 400)...
+Resultado: ✅ Válida
+Tiempo de ejecución: 0.198244 segundos
+
+Evaluando cadena con 400 a's y 400 b's (longitud 800)...
+Resultado: ✅ Válida
+Tiempo de ejecución: 1.613016 segundos
+
+Evaluando cadena con 600 a's y 600 b's (longitud 1200)...
+Resultado: ✅ Válida
+Tiempo de ejecución: 5.528667 segundos
+
+Evaluando cadena con 800 a's y 800 b's (longitud 1600)...
+Resultado: ✅ Válida
+Tiempo de ejecución: 18.200996 segundos
+
+Evaluando cadena con 1000 a's y 1000 b's (longitud 2000)...
+Resultado: ✅ Válida
+Tiempo de ejecución: 35.805268 segundos
+```
+
