@@ -131,3 +131,9 @@ Tiempo de ejecución: 35.805268 segundos
 ```
 
 ![Image](https://github.com/user-attachments/assets/7cc310e0-3b5a-41f2-b63a-ac3e8c394ac0)
+
+- La gráfica evidencia que el tiempo de ejecución del algoritmo crece de forma cúbica a medida que aumenta la longitud de la cadena, lo cual concuerda con su complejidad teórica.
+
+- En cadenas de menor tamaño, el algoritmo se comporta de manera eficiente. Sin embargo, al incrementar la longitud, el tiempo de ejecución se incrementa drásticamente, lo que refleja su limitada escalabilidad.
+
+- Esta tendencia sugiere que, si bien CYK es preciso y confiable, no es ideal para procesar grandes volúmenes de texto o aplicaciones que requieren respuestas en tiempo real sin aplicar optimizaciones.
