@@ -192,53 +192,57 @@ Tiempo de ejecución: 0.000048 segundos
 
 Una gran diferencia entre ambos enfoques es el tratamiento de ambigüedad. Bison no permite ambigüedades directamente: al encontrar conflictos shift/reduce o reduce/reduce, obliga al programador a resolverlos con reglas de precedencia o reestructuración de la gramática. En cambio, CYK puede detectar y representar múltiples derivaciones válidas para una cadena ambigua.
 
-## 🎯 ¿Qué cadenas acepta Bison? ¿Y por qué no acepta ambigüedades?
-### ✅ Cadenas válidas:
-Son aquellas que cumplen la forma aⁿbⁿ, con igual número de a seguidas por igual número de b, como:
+⚠️ ¿Por qué Bison evita ambigüedades?
 
-ab  
-aabb  
-aaabbb  
-aaaabbbb  
-aaaaabbbbb  
+Bison genera analizadores LALR(1), un tipo de parser determinista por desplazamiento y reducción.
 
+🔍 Por diseño:
 
-### ❌ Cadenas inválidas:
-Cadenas que violan el patrón aⁿbⁿ, como:
+Solo puede mirar un símbolo de entrada por adelantado (lookahead).
 
-aab     → más 'a' que 'b'  
-abb     → más 'b' que 'a'  
-ba      → empieza con 'b'  
-abab    → intercaladas  
-aabbb   → n ≠ m  
-a       → no hay 'b'
+En cada paso, debe tomar una única acción: shift o reduce.
 
-### 📘 Justificación teórica
-La gramática utilizada en Bison es:
+Si hay más de una opción válida, se produce un conflicto.
 
-S → A X | A B  
-X → S B  
-A → 'a'  
-B → 'b'
+📉 Por eso:
 
-Esta gramática está diseñada para generar solo cadenas de la forma aⁿbⁿ:
+Gramáticas ambiguas (con múltiples derivaciones válidas para una misma cadena) causan conflictos shift/reduce o reduce/reduce.
 
-S → A B genera la base: ab
+Bison los detecta en tiempo de compilación y:
 
-S → A X → A S B permite construir recursivamente:
-a aab b → aa bb,
-a aaabbb b → aaa bbb y así sucesivamente.
+Muestra un warning.
 
-Cada vez que se anida una nueva S, se agrega una a al inicio y una b al final, garantizando el equilibrio.
+Elige una acción por defecto, que puede no ser la correcta.
 
-### ⚠️ ¿Por qué Bison no acepta ambigüedades?
-Bison implementa un parser LALR(1), que es un tipo de parser determinista descendente por desplazamiento/reducción. Por diseño:
+O falla, si no puede resolver el conflicto automáticamente.
 
-Solo puede tomar una única decisión en cada punto del análisis, mirando un símbolo a la vez.
+### ✅ ¿Por qué CYK puede manejar ambigüedades?
 
-Si hay más de una opción válida (por ejemplo, dos formas de reducir una misma cadena), no puede continuar sin ayuda.
+- CYK **no se limita a una sola derivación**, sino que **explora todas las combinaciones posibles** para derivar una cadena.
+- Cada celda en la tabla CYK puede contener **múltiples no terminales** que generan la misma subcadena.
+- Gracias a esto, se puede:
+  - ✅ Verificar si una cadena **pertenece al lenguaje**.
+  - ✅ **Contar** cuántas derivaciones diferentes existen para la misma cadena.
+  - ✅ Detectar **gramáticas ambiguas** si una cadena tiene **más de una derivación**.
 
-Eso se manifiesta como errores de tipo conflicto shift/reduce o reduce/reduce, que Bison te obliga a resolver.
+---
+
+### 🧠 ¿Cómo lo hace?
+
+1. **Inicialización**: Llena la primera fila de la tabla con las producciones terminales.
+2. **Construcción**: Para cada longitud de subcadena, combina producciones binarias de la gramática.
+3. **Aceptación**: Si el símbolo inicial (como `S`) aparece en la celda que cubre toda la cadena, entonces la cadena pertenece al lenguaje.
+
+---
+
+### 📊 Ejemplo
+
+Para una cadena como `aaabbb`, el algoritmo:
+
+- Encuentra múltiples formas de derivarla desde la gramática.
+- Guarda todas las combinaciones posibles.
+- Si hay **más de una forma válida** de derivarla, la gramática es **ambigua** respecto a esa cadena.
+
 
 # Otras Comparaciones
 
@@ -247,3 +251,29 @@ Bison admite gramáticas LALR(1), lo que significa que puede manejar una amplia 
 
 ## Uso y Escalabilidad
 Bison, en conjunto con Flex, ofrece una interfaz de desarrollo muy accesible. Solo es necesario describir la gramática y las acciones semánticas; el compilador genera automáticamente el parser. Bison escala bien en aplicaciones reales. Es utilizado en compiladores, intérpretes y analizadores, y puede manejar archivos de código fuente de miles de líneas sin problemas, gracias a su enfoque determinista y su ejecución lineal. CYK, al ser un algoritmo de fuerza bruta con complejidad cúbica respecto al tamaño de la entrada, no escala bien. Además, el algoritmo CYK requiere programación manual del parser, incluyendo estructuras para representar reglas, manejo de la tabla dinámica y lógica de evaluación
+
+# Conclusiones:
+🔹Capacidad para manejar ambigüedad:
+ - CYK: Puede manejar gramáticas ambiguas, ya que analiza todas las posibles derivaciones de una cadena. Incluso permite contar cuántas derivaciones tiene una cadena.
+
+ - Bison: No acepta gramáticas ambiguas sin intervención del usuario. Al encontrar ambigüedad, lanza errores de shift/reduce o reduce/reduce, ya que debe tomar decisiones deterministas con solo 1 símbolo de lookahead.
+
+🔹Modelo de análisis:
+ - CYK: Utiliza un enfoque bottom-up no determinista basado en programación dinámica.
+
+ - Bison: Implementa un parser LALR(1) determinista, que genera un autómata que decide con una única acción por cada estado y símbolo.
+
+🔹Flexibilidad gramatical:
+ - CYK: Acepta cualquier gramática libre de contexto (CFG) convertida a Forma Normal de Chomsky (FNC).
+
+ - Bison: Permite CFGs más legibles y expresivas, pero no todas las CFG son LALR(1), por lo que puede rechazar algunas por conflictos.
+
+🔹Uso práctico:
+ - CYK: Es útil para análisis teórico, detección de ambigüedad y validación de gramáticas. Es más lento, con complejidad O(n³).
+
+ - Bison: Ideal para compiladores reales y parsers rápidos, gracias a su eficiencia. Pero requiere gramáticas no ambiguas o bien resueltas por el usuario.
+
+🔹Diagnóstico y control:
+ - CYK: Permite implementar fácilmente funciones para contar derivaciones y detectar ambigüedades.
+
+ - Bison: Informa errores, pero no indica cuántas derivaciones hay. El control de la ambigüedad es manual y depende del diseñador de la gramática.
