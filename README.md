@@ -192,6 +192,51 @@ Tiempo de ejecución: 0.000048 segundos
 
 Una gran diferencia entre ambos enfoques es el tratamiento de ambigüedad. Bison no permite ambigüedades directamente: al encontrar conflictos shift/reduce o reduce/reduce, obliga al programador a resolverlos con reglas de precedencia o reestructuración de la gramática. En cambio, CYK puede detectar y representar múltiples derivaciones válidas para una cadena ambigua.
 
+##🎯 ¿Qué cadenas acepta Bison? ¿Y por qué no acepta ambigüedades?
+##✅ Cadenas válidas:
+Son aquellas que cumplen la forma aⁿbⁿ, con igual número de a seguidas por igual número de b, como:
+
+ab  
+aabb  
+aaabbb  
+aaaabbbb  
+aaaaabbbbb  
+
+
+###❌ Cadenas inválidas:
+Cadenas que violan el patrón aⁿbⁿ, como:
+
+aab     → más 'a' que 'b'  
+abb     → más 'b' que 'a'  
+ba      → empieza con 'b'  
+abab    → intercaladas  
+aabbb   → n ≠ m  
+a       → no hay 'b'  
+###📘 Justificación teórica
+La gramática utilizada en Bison es:
+
+S → A X | A B  
+X → S B  
+A → 'a'  
+B → 'b'
+Esta gramática está diseñada para generar solo cadenas de la forma aⁿbⁿ:
+
+S → A B genera la base: ab
+
+S → A X → A S B permite construir recursivamente:
+a aab b → aa bb,
+a aaabbb b → aaa bbb y así sucesivamente.
+
+Cada vez que se anida una nueva S, se agrega una a al inicio y una b al final, garantizando el equilibrio.
+
+###⚠️ ¿Por qué Bison no acepta ambigüedades?
+Bison implementa un parser LALR(1), que es un tipo de parser determinista descendente por desplazamiento/reducción. Por diseño:
+
+Solo puede tomar una única decisión en cada punto del análisis, mirando un símbolo a la vez.
+
+Si hay más de una opción válida (por ejemplo, dos formas de reducir una misma cadena), no puede continuar sin ayuda.
+
+Eso se manifiesta como errores de tipo conflicto shift/reduce o reduce/reduce, que Bison te obliga a resolver.
 
 # Otras Comparaciones
 
