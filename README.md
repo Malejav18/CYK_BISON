@@ -193,7 +193,7 @@ Tiempo de ejecución: 0.000048 segundos
 Una gran diferencia entre ambos enfoques es el tratamiento de ambigüedad. Bison no permite ambigüedades directamente: al encontrar conflictos shift/reduce o reduce/reduce, obliga al programador a resolverlos con reglas de precedencia o reestructuración de la gramática. En cambio, CYK puede detectar y representar múltiples derivaciones válidas para una cadena ambigua.
 
 ## 🎯 ¿Qué cadenas acepta Bison? ¿Y por qué no acepta ambigüedades?
-## ✅ Cadenas válidas:
+### ✅ Cadenas válidas:
 Son aquellas que cumplen la forma aⁿbⁿ, con igual número de a seguidas por igual número de b, como:
 
 ab  
