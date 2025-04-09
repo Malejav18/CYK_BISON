@@ -7,17 +7,20 @@
 #define MAX_NONTERMINALS 10
 #define MAX_RULES 50
 
+//Produccion Dos No Terminales: A -> B C
 typedef struct {
     int parent;
     int left;
     int right;
 } BinaryProduction;
 
+//Produccion Terminal: B -> b
 typedef struct {
     int nonTerminal;
     char terminal;
 } TerminalProduction;
 
+// Inicialización de tabla triangular
 int table[MAX_LEN][MAX_LEN][MAX_NONTERMINALS];
 
 BinaryProduction binaryRules[MAX_RULES];
@@ -29,6 +32,7 @@ int terminalRuleCount = 0;
 int numNonTerminals = 0;
 char nonTerminalNames[MAX_NONTERMINALS];
 
+//Obtener el índice del no terminal
 int getNonTerminalIndex(char c) {
     for (int i = 0; i < numNonTerminals; ++i) {
         if (nonTerminalNames[i] == c) return i;
@@ -37,6 +41,7 @@ int getNonTerminalIndex(char c) {
     return numNonTerminals++;
 }
 
+//Agregar una nueva regla de la gramática de la forma A -> B C
 void addBinaryRule(char parent, char left, char right) {
     binaryRules[binaryRuleCount++] = (BinaryProduction){
         .parent = getNonTerminalIndex(parent),
@@ -45,6 +50,7 @@ void addBinaryRule(char parent, char left, char right) {
     };
 }
 
+//Agregar una nueva regla de la gramática de la forma B -> b
 void addTerminalRule(char nonTerminal, char terminal) {
     terminalRules[terminalRuleCount++] = (TerminalProduction){
         .nonTerminal = getNonTerminalIndex(nonTerminal),
@@ -52,19 +58,23 @@ void addTerminalRule(char nonTerminal, char terminal) {
     };
 }
 
+//Algoritmo CYK
 int cyk(const char* input) {
     int n = strlen(input);
-    memset(table, 0, sizeof(table));
+    memset(table, 0, sizeof(table)); 
 
+    //Inicializar la primera fila de la tabla con las reglas terminales
     for (int i = 0; i < n; ++i) {
         for (int r = 0; r < terminalRuleCount; ++r) {
             if (terminalRules[r].terminal == input[i]) {
-                table[i][0][terminalRules[r].nonTerminal] = 1;
+                table[i][0][terminalRules[r].nonTerminal] = 1; //Revisar individualmente y agregar qué reglas gramaticales son de la forma B -> b  donde a es el caracter
             }
         }
     }
 
+    //Llenar las celdas inferiores de la tabla dividiendo la cadena en subcadenas más pequeñas
     for (int l = 2; l <= n; ++l) {
+        // Se divide la subcadena en dos partes, y se revisa si las dos partes coinciden con reglas de la forma A -> B C
         for (int i = 0; i <= n - l; ++i) {
             for (int k = 1; k < l; ++k) {
                 for (int r = 0; r < binaryRuleCount; ++r) {
@@ -78,11 +88,13 @@ int cyk(const char* input) {
             }
         }
     }
-
+    //Se revisa que el último valor de la tabla coincida con el símbolo inicial, para determinar si la cadena es válida
     int startSymbol = getNonTerminalIndex('S');
     return table[0][n-1][startSymbol];
 }
 
+
+//Función iterativa para generar una cadena de la forma aⁿbⁿ y medir el tiempo
 void evaluate(int n) {
     char* input = malloc(2 * n + 1);
     for (int i = 0; i < n; i++) input[i] = 'a';
