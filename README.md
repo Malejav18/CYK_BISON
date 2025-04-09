@@ -203,7 +203,7 @@ aaaabbbb
 aaaaabbbbb  
 
 
-###❌ Cadenas inválidas:
+### ❌ Cadenas inválidas:
 Cadenas que violan el patrón aⁿbⁿ, como:
 
 aab     → más 'a' que 'b'  
@@ -211,14 +211,16 @@ abb     → más 'b' que 'a'
 ba      → empieza con 'b'  
 abab    → intercaladas  
 aabbb   → n ≠ m  
-a       → no hay 'b'  
-###📘 Justificación teórica
+a       → no hay 'b'
+
+### 📘 Justificación teórica
 La gramática utilizada en Bison es:
 
 S → A X | A B  
 X → S B  
 A → 'a'  
 B → 'b'
+
 Esta gramática está diseñada para generar solo cadenas de la forma aⁿbⁿ:
 
 S → A B genera la base: ab
@@ -229,7 +231,7 @@ a aaabbb b → aaa bbb y así sucesivamente.
 
 Cada vez que se anida una nueva S, se agrega una a al inicio y una b al final, garantizando el equilibrio.
 
-###⚠️ ¿Por qué Bison no acepta ambigüedades?
+### ⚠️ ¿Por qué Bison no acepta ambigüedades?
 Bison implementa un parser LALR(1), que es un tipo de parser determinista descendente por desplazamiento/reducción. Por diseño:
 
 Solo puede tomar una única decisión en cada punto del análisis, mirando un símbolo a la vez.
