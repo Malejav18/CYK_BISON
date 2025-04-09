@@ -181,4 +181,15 @@ Tiempo de ejecución: 0.000048 segundos
 
 - Por otro lado, Bison requiere una gramática más estructurada, pero ofrece un rendimiento enorme gracias a la generación de analizadores eficientes como LALR(1).
 
-# Prueba 2: Gramáticas Ambiguas
+# Prueba 2: Manejo de Ambiguedades
+
+Una gran diferencia entre ambos enfoques es el tratamiento de ambigüedad. Bison no permite ambigüedades directamente: al encontrar conflictos shift/reduce o reduce/reduce, obliga al programador a resolverlos con reglas de precedencia o reestructuración de la gramática. En cambio, CYK puede detectar y representar múltiples derivaciones válidas para una cadena ambigua.
+
+
+# Otras Comparaciones
+
+## Soporte Gramatical:
+Bison admite gramáticas LALR(1), lo que significa que puede manejar una amplia gama de estructuras sintácticas sin requerir transformaciones específicas. Esto permite escribir reglas en notación BNF bastante natural. En cambio, CYK solo funciona con gramáticas en Forma Normal de Chomsky (CNF), lo que obliga a transformar la gramática original a una forma muy restringida (producciones binarias o terminales). Esta limitación puede hacer que el diseño de gramáticas para CYK sea más complejo y menos legible.
+
+## Uso y Escalabilidad
+Bison, en conjunto con Flex, ofrece una interfaz de desarrollo muy accesible. Solo es necesario describir la gramática y las acciones semánticas; el compilador genera automáticamente el parser. Bison escala bien en aplicaciones reales. Es utilizado en compiladores, intérpretes y analizadores, y puede manejar archivos de código fuente de miles de líneas sin problemas, gracias a su enfoque determinista y su ejecución lineal. CYK, al ser un algoritmo de fuerza bruta con complejidad cúbica respecto al tamaño de la entrada, no escala bien. Además, el algoritmo CYK requiere programación manual del parser, incluyendo estructuras para representar reglas, manejo de la tabla dinámica y lógica de evaluación
