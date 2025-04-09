@@ -1,5 +1,12 @@
 # Comparando CYK y Bison...
 
+Integrantes:
+
+- Eduardo Hincapie 
+- Josh Lopez 
+- Miguel Suarez 
+- Alejandra Vargas
+
 ## 🧠 Forma normal de Chomsky (CNF)
 En el contexto de las **Gramáticas Independientes del Contexto (GIC)**, una gramática se considera que está en la **forma normal de Chomsky (CNF)** si todas sus reglas tienen una de estas formas:
 
